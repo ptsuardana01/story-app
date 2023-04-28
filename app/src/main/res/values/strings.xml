@@ -3,4 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_header">Login</string>
+    <string name="hint_email">Your Email</string>
+    <string name="hint_password">Your Password</string>
+    <string name="auth_wave_bg">Auth wave bg</string>
+    <string name="login_animation">Animation Login</string>
 </resources>
