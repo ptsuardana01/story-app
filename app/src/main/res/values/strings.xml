@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Story App</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="login_header">Login</string>
-    <string name="hint_email">Your Email</string>
-    <string name="hint_password">Your Password</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
     <string name="auth_wave_bg">Auth wave bg</string>
     <string name="login_animation">Animation Login</string>
+    <string name="title">Story App</string>
+    <string name="login_quest">Tidak Memiliki Akun?</string>
+    <string name="register_header">Register</string>
+    <string name="error_pass_msg">Password anda harus lebih dari 8 karakter</string>
+    <string name="error_email">Format email tidak valid</string>
 </resources>

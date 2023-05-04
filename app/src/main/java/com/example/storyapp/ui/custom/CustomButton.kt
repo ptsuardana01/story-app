@@ -1,4 +1,4 @@
-package com.example.storyapp.ui.costume
+package com.example.storyapp.ui.custom
 
 import android.content.Context
 import android.graphics.Canvas
@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.example.storyapp.R
 
-class CostumeButton : AppCompatButton {
+class CustomButton : AppCompatButton {
 
     private lateinit var enabledBackground: Drawable
     private lateinit var disabledBackground: Drawable
@@ -36,7 +36,7 @@ class CostumeButton : AppCompatButton {
 
     private fun init() {
         txtColor = ContextCompat.getColor(context, android.R.color.background_light)
-        enabledBackground = ContextCompat.getDrawable(context, R.drawable.costume_bg_button) as Drawable
-        disabledBackground = ContextCompat.getDrawable(context, R.drawable.costume_bg_button_disable) as Drawable
+        enabledBackground = ContextCompat.getDrawable(context, R.drawable.custom_bg_button) as Drawable
+        disabledBackground = ContextCompat.getDrawable(context, R.drawable.custom_bg_button_disable) as Drawable
     }
 }
