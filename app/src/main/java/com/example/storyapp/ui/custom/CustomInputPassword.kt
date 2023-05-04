@@ -43,7 +43,8 @@ class CustomInputPassword : AppCompatEditText, View.OnTouchListener {
 
     private fun init() {
         lockIcon = ContextCompat.getDrawable(context, R.drawable.baseline_lock_24) as Drawable
-        eyesIcon = ContextCompat.getDrawable(context, R.drawable.baseline_remove_red_eye_24) as Drawable
+        eyesIcon =
+            ContextCompat.getDrawable(context, R.drawable.baseline_eye_24) as Drawable
         setOnTouchListener(this)
 
         addTextChangedListener(object : TextWatcher {
@@ -103,10 +104,11 @@ class CustomInputPassword : AppCompatEditText, View.OnTouchListener {
             if (isShowPasswordButtonClicked) {
                 when (event.action) {
                     MotionEvent.ACTION_UP -> {
-                            this.transformationMethod = PasswordTransformationMethod.getInstance()
-                            Log.d("PasswordAct", "Icon show!")
+                        this.transformationMethod = PasswordTransformationMethod.getInstance()
+                        Log.d("PasswordAct", "Icon show!")
                         return true
                     }
+
                     MotionEvent.ACTION_DOWN -> {
                         this.transformationMethod = HideReturnsTransformationMethod.getInstance()
                         Log.d("PasswordAct", "Icon hide!")

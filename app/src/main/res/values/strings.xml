@@ -1,14 +1,15 @@
 <resources>
     <string name="app_name">Story App</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="login_header">Login</string>
+    <string name="login_header">Masuk</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="auth_wave_bg">Auth wave bg</string>
-    <string name="login_animation">Animation Login</string>
-    <string name="title">Story App</string>
-    <string name="login_quest">Tidak Memiliki Akun?</string>
-    <string name="register_header">Register</string>
+    <string name="auth_animation">Animation Auth</string>
+    <string name="register_quest">Tidak memiliki akun?</string>
+    <string name="login_quest">Sudah memiliki akun?</string>
+    <string name="register_header">Mendaftar</string>
+    <string name="register">Daftar</string>
     <string name="error_pass_msg">Password anda harus lebih dari 8 karakter</string>
     <string name="error_email">Format email tidak valid</string>
+    <string name="hint_name">Name</string>
 </resources>

@@ -1,8 +1,8 @@
 package com.example.storyapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.storyapp.databinding.ActivityAuthenticationBinding
 import com.example.storyapp.ui.fragments.LoginFragment
 
@@ -23,7 +23,11 @@ class AuthenticationActivity : AppCompatActivity() {
             Log.d("MyFlexibleFragment", "Fragment Name :" + LoginFragment::class.java.simpleName)
             fragmentManager
                 .beginTransaction()
-                .add(R.id.auth_fragment_container, loginFragment, LoginFragment::class.java.simpleName)
+                .add(
+                    R.id.auth_fragment_container,
+                    loginFragment,
+                    LoginFragment::class.java.simpleName
+                )
                 .commit()
         }
     }

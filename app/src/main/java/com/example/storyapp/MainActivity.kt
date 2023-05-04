@@ -1,7 +1,7 @@
 package com.example.storyapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.storyapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

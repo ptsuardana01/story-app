@@ -18,16 +18,22 @@ class CustomButton : AppCompatButton {
     constructor(context: Context) : super(context) {
         init()
     }
+
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         init()
     }
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        background = if(isEnabled) enabledBackground else disabledBackground
+        background = if (isEnabled) enabledBackground else disabledBackground
 
         setTextColor(txtColor)
         textSize = 14f
@@ -36,7 +42,9 @@ class CustomButton : AppCompatButton {
 
     private fun init() {
         txtColor = ContextCompat.getColor(context, android.R.color.background_light)
-        enabledBackground = ContextCompat.getDrawable(context, R.drawable.custom_bg_button) as Drawable
-        disabledBackground = ContextCompat.getDrawable(context, R.drawable.custom_bg_button_disable) as Drawable
+        enabledBackground =
+            ContextCompat.getDrawable(context, R.drawable.custom_bg_button) as Drawable
+        disabledBackground =
+            ContextCompat.getDrawable(context, R.drawable.custom_bg_button_disable) as Drawable
     }
 }

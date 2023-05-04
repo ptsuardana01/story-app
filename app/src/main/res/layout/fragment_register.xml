@@ -5,30 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="16dp"
-    tools:context=".ui.fragments.LoginFragment">
+    tools:context=".ui.fragments.RegisterFragment">
 
     <ImageView
-        android:id="@+id/login_image"
+        android:id="@+id/register_image"
         style="@style/AuthImages"
-        android:src="@drawable/digital_lifestyle"
+        android:src="@drawable/mobile_marketing_cute"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/auth_animation" />
 
     <TextView
-        android:id="@+id/login_header"
+        android:id="@+id/register_header"
         style="@style/AuthHeader"
-        android:text="@string/login_header"
+        android:layout_marginTop="16dp"
+        android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_image" />
+        app:layout_constraintTop_toBottomOf="@+id/register_image" />
 
     <EditText
-        android:id="@+id/ed_login_email"
+        android:id="@+id/ed_register_name"
         style="@style/StandardInput"
-        android:layout_marginHorizontal="4dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
+        android:hint="@string/hint_name"
+        android:drawableStart="@drawable/baseline_person_24"
+        android:paddingHorizontal="15dp"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/register_header" />
+
+    <EditText
+        android:id="@+id/ed_register_email"
+        style="@style/StandardInput"
+        android:layout_marginTop="16dp"
         android:drawableStart="@drawable/baseline_email_24"
         android:hint="@string/hint_email"
         android:importantForAutofill="no"
@@ -36,7 +49,7 @@
         android:paddingHorizontal="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_header" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_name" />
 
     <TextView
         android:id="@+id/error_email"
@@ -47,11 +60,11 @@
         android:visibility="gone"
         android:layout_marginTop="4dp"
         android:text="@string/error_email"
-        app:layout_constraintStart_toStartOf="@+id/ed_login_email"
-        app:layout_constraintTop_toBottomOf="@+id/ed_login_email" />
+        app:layout_constraintStart_toStartOf="@+id/ed_register_email"
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_email" />
 
     <com.example.storyapp.ui.custom.CustomInputPassword
-        android:id="@+id/ed_login_password"
+        android:id="@+id/ed_register_password"
         style="@style/StandardInput"
         android:inputType="textPassword"
         android:layout_marginHorizontal="4dp"
@@ -72,21 +85,21 @@
         android:visibility="gone"
         android:layout_marginTop="4dp"
         android:text="@string/error_pass_msg"
-        app:layout_constraintStart_toStartOf="@+id/ed_login_password"
-        app:layout_constraintTop_toBottomOf="@+id/ed_login_password"
+        app:layout_constraintStart_toStartOf="@+id/ed_register_password"
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_password"
         />
 
     <com.example.storyapp.ui.custom.CustomButton
         android:id="@+id/costume_button"
         style="@style/StandardButton"
-        android:text="@string/login_header"
+        android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/error_pass" />
 
     <include
-        android:id="@+id/include_intent_register"
-        layout="@layout/include_register_intent"/>
+        android:id="@+id/include_intent_login"
+        layout="@layout/include_login_intent"/>
 
 
 

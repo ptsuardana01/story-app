@@ -9,7 +9,7 @@ import com.example.storyapp.R
 
 class CustomInputEmail : AppCompatEditText {
 
-    private lateinit var emailIcon : Drawable
+    private lateinit var emailIcon: Drawable
 
     constructor(context: Context) : super(context) {
         init()
@@ -19,11 +19,15 @@ class CustomInputEmail : AppCompatEditText {
         init()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         init()
     }
 
     private fun init() {
-       emailIcon = ContextCompat.getDrawable(context, R.drawable.baseline_email_24) as Drawable
+        emailIcon = ContextCompat.getDrawable(context, R.drawable.baseline_email_24) as Drawable
     }
 }
