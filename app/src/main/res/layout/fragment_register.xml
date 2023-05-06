@@ -72,6 +72,7 @@
         android:drawableStart="@drawable/baseline_lock_24"
         android:importantForAutofill="no"
         android:paddingHorizontal="15dp"
+        android:hint="@string/hint_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/error_email" />
@@ -96,6 +97,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/error_pass" />
+
+    <include
+        android:id="@+id/include_loading_screen"
+        layout="@layout/include_loading_screen"/>
 
     <include
         android:id="@+id/include_intent_login"
