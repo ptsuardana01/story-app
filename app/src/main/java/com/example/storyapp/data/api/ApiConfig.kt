@@ -11,7 +11,7 @@ class ApiConfig {
             val authInterceptor = Interceptor { chain ->
                 val req = chain.request()
                 val requestHeaders = req.newBuilder()
-                    .addHeader("Authorization", "Your Personal Token")
+                    .addHeader("Authorization", "Bearer <token>")
                     .build()
                 chain.proceed(requestHeaders)
             }
@@ -19,7 +19,7 @@ class ApiConfig {
                 .addInterceptor(authInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://story-api.dicoding.dev/v1")
+                .baseUrl("https://story-api.dicoding.dev/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

@@ -91,7 +91,7 @@
         />
 
     <com.example.storyapp.ui.custom.CustomButton
-        android:id="@+id/costume_button"
+        android:id="@+id/btn_register"
         style="@style/StandardButton"
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +99,7 @@
         app:layout_constraintTop_toBottomOf="@+id/error_pass" />
 
     <include
-        android:id="@+id/include_loading_screen"
+        android:id="@+id/include_loading"
         layout="@layout/include_loading_screen"/>
 
     <include

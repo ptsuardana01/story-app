@@ -1,5 +1,6 @@
 package com.example.storyapp.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -7,15 +8,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.storyapp.MainActivity
 import com.example.storyapp.R
 import com.example.storyapp.databinding.FragmentRegisterBinding
+import com.example.storyapp.models.AuthViewModel
 
 class RegisterFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
+
+    private val authViewModel : AuthViewModel by viewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,20 +94,26 @@ class RegisterFragment : Fragment(), View.OnClickListener {
         })
 
         binding.includeIntentLogin.registerIntent.setOnClickListener(this)
+        binding.btnRegister.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
-        if (v.id == R.id.registerIntent) {
-            val loginFragment = LoginFragment()
-            val fragmentManager = parentFragmentManager
-            fragmentManager.beginTransaction().apply {
-                replace(
-                    R.id.auth_fragment_container,
-                    loginFragment,
-                    LoginFragment::class.java.simpleName
-                )
-                addToBackStack(null)
-                commit()
+        when (v.id) {
+            R.id.registerIntent -> {
+                val loginFragment = LoginFragment()
+                val fragmentManager = parentFragmentManager
+                fragmentManager.beginTransaction().apply {
+                    replace(
+                        R.id.auth_fragment_container,
+                        loginFragment,
+                        LoginFragment::class.java.simpleName
+                    )
+                    addToBackStack(null)
+                    commit()
+                }
+            }
+            R.id.btn_register -> {
+                Log.d("regisBTN", "button clicked!")
             }
         }
     }
