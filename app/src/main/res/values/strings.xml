@@ -11,5 +11,7 @@
     <string name="register">Daftar</string>
     <string name="error_pass_msg">Password anda harus lebih dari 8 karakter</string>
     <string name="error_email">Format email tidak valid</string>
-    <string name="hint_name">Name</string>
+    <string name="hint_name">Nama</string>
+    <string name="story_img">Image Story</string>
+    <string name="story_text">Ini standard text</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.storyapp.data.api
 
 import com.example.storyapp.data.responses.LoginResponse
 import com.example.storyapp.data.responses.RegisterResponse
+import com.example.storyapp.data.responses.AllStoriesResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -20,4 +21,7 @@ interface ApiService {
         @Field("email") email: String,
         @Field("password") password: String,
     ) : Call<LoginResponse>
+
+    @GET("stories")
+    fun getAllStories() : Call<AllStoriesResponse>
 }

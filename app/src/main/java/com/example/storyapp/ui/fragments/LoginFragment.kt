@@ -30,7 +30,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,6 +37,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,26 +118,17 @@ class LoginFragment : Fragment(), View.OnClickListener {
                 val password = binding.edLoginPassword.text.toString()
                 binding.apply {
                     val validInput = validationInput(email, password)
-                    Log.d("btnLogin", "start!")
                     if (validInput) {
                         authViewModel.apply {
-                            Log.d("btnLogin", "loading false!")
-                            this.login(email, password)
-                            this.isLoading.observe(requireActivity()) {
-                                Log.d("btnLogin", "loading true!")
+                            login(email, password)
+                            isLoading.observe(requireActivity()) {
                                 showLoading(it)
                             }
-                            this.getToken().observe(requireActivity()) { token ->
-                                Log.d("btnLogin", "get token!")
+                            getToken().observe(requireActivity()) { token ->
                                 isLogin(token)
-                            }
-                        this.msg.observe(requireActivity()) { msg ->
-                            if (msg == "success") {
+                                Log.d("tokencheck", "token: $token")
                                 Toast.makeText(requireContext(), "Welcome to StoryApp!", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
                             }
-                        }
                         }
                     }
 
@@ -154,7 +145,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        binding.includeLoading.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        if (isLoading) binding.includeLoading.progressBar.visibility = View.VISIBLE
+            else binding.includeLoading.progressBar.visibility = View.GONE
     }
 
     private fun validationInput(email: String, password: String): Boolean {

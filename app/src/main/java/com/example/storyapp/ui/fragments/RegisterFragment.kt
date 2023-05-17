@@ -1,5 +1,6 @@
 package com.example.storyapp.ui.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -10,20 +11,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.example.storyapp.MainActivity
 import com.example.storyapp.R
+import com.example.storyapp.data.local.AuthPreferences
 import com.example.storyapp.databinding.FragmentRegisterBinding
 import com.example.storyapp.models.AuthViewModel
+import com.example.storyapp.models.AuthViewModelFactory
 
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 class RegisterFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-
-    private val authViewModel : AuthViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,6 +103,8 @@ class RegisterFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
+        val pref = AuthPreferences.getInstance(requireContext().dataStore)
+        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
         when (v.id) {
             R.id.registerIntent -> {
                 val loginFragment = LoginFragment()
@@ -113,19 +120,57 @@ class RegisterFragment : Fragment(), View.OnClickListener {
                 }
             }
             R.id.btn_register -> {
-                Log.d("regisBTN", "button clicked!")
+                binding.apply {
+                    val name = edRegisterName.text.toString()
+                    val email = edRegisterEmail.text.toString()
+                    val password = edRegisterPassword.text.toString()
+
+                    val inputValid = validationInput(name, email, password)
+
+                    if (inputValid) {
+                        authViewModel.apply {
+                            this.register(name, email, password)
+                            this.isLoading.observe(requireActivity()) {
+                                showLoading(it)
+                            }
+                            this.getToken().observe(requireActivity()) { token ->
+                                isLogin(token)
+                                Toast.makeText(requireContext(), "Welcome to StoryApp!", Toast.LENGTH_SHORT).show()
+                            }
+
+                        }
+                    }
+                }
             }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) binding.includeLoading.progressBar.visibility = View.VISIBLE
+            else binding.includeLoading.progressBar.visibility = View.GONE
+    }
+
+    private fun validationInput(name: String, email: String, password: String): Boolean {
+        if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) return true
+
+        return false
+    }
+
+    private fun isLogin(token: String) {
+        if (token != "") {
+            val intentToMain = Intent(requireActivity(), MainActivity::class.java)
+            startActivity(intentToMain)
+        }
     }
 
     private fun isValidEmail(email: String): Boolean {
         val regexEmail = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$")
         return regexEmail.matches(email)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
