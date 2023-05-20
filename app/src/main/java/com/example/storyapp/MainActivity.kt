@@ -39,8 +39,12 @@ class MainActivity : AppCompatActivity() {
         binding.rvStoryApp.setHasFixedSize(true)
         showRecyclerView()
 
-        mainViewModel.listStory.observe(this){ list ->
-            setUser(list)
+        authViewModel.getToken().observe(this) { token ->
+            mainViewModel.getAllListStory(token)
+        }
+
+        mainViewModel.listStory.observe(this) {
+            setUser(it)
         }
 
         mainViewModel.isLoading.observe(this){
@@ -63,6 +67,15 @@ class MainActivity : AppCompatActivity() {
     private fun setUser(items: List<ListStoryItem>) {
         val listStory = StoryListAdapter(items)
         binding.rvStoryApp.adapter = listStory
+
+        listStory.setOnStoryListClickCallback( object: StoryListAdapter.OnStoryListClickCallback {
+            override fun onItemClicked(story: ListStoryItem) {
+                val intentToDetail = Intent(this@MainActivity, DetailStoryActivity::class.java)
+                intentToDetail.putExtra(DetailStoryActivity.ID, story.id)
+                startActivity(intentToDetail)
+            }
+
+        })
     }
 
     private fun showRecyclerView() {

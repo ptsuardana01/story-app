@@ -126,8 +126,6 @@ class LoginFragment : Fragment(), View.OnClickListener {
                             }
                             getToken().observe(requireActivity()) { token ->
                                 isLogin(token)
-                                Log.d("tokencheck", "token: $token")
-                                Toast.makeText(requireContext(), "Welcome to StoryApp!", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -141,6 +139,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
         if (token != "") {
             val intentToMain = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intentToMain)
+            Toast.makeText(requireContext(), "Welcome to StoryApp!", Toast.LENGTH_SHORT).show()
         }
     }
 

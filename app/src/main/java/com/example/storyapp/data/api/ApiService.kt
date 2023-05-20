@@ -3,6 +3,7 @@ package com.example.storyapp.data.api
 import com.example.storyapp.data.responses.LoginResponse
 import com.example.storyapp.data.responses.RegisterResponse
 import com.example.storyapp.data.responses.AllStoriesResponse
+import com.example.storyapp.data.responses.DetailStoryResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -24,4 +25,9 @@ interface ApiService {
 
     @GET("stories")
     fun getAllStories() : Call<AllStoriesResponse>
+
+    @GET("stories/{id}")
+    fun getDetailStory(
+        @Path("id") id: String
+    ) : Call<DetailStoryResponse>
 }

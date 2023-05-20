@@ -23,6 +23,7 @@ class AuthViewModel(private val pref: AuthPreferences) : ViewModel() {
     private val _msg = MutableLiveData<String>()
     val msg: LiveData<String> = _msg
 
+
     fun login(email: String, password: String) {
         _isLoading.value = true
         val client = ApiConfig.getApiService().login(email, password)
