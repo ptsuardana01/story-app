@@ -6,22 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".DetailStoryActivity">
 
-    <TextView
-        android:id="@+id/detail_header"
-        style="@style/HeaderApp"
-        android:text="@string/detail_header_story"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ImageView
         android:id="@+id/detail_img"
         android:layout_width="360dp"
-        android:layout_height="300dp"
+        android:layout_height="380dp"
         android:contentDescription="@string/detail_image"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_header"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
 
     <TextView

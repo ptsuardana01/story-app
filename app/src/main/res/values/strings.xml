@@ -16,4 +16,5 @@
     <string name="story_text">Ini standard text</string>
     <string name="detail_header_story">Detail Story</string>
     <string name="detail_image">Detail Image</string>
+    <string name="logout">Logout</string>
 </resources>

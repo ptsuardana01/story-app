@@ -3,6 +3,8 @@ package com.example.storyapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
@@ -51,13 +53,25 @@ class MainActivity : AppCompatActivity() {
             showLoading(it)
         }
 
-        binding.btnLogout.setOnClickListener{
-            authViewModel.logout()
-            val intentLogout = Intent(this, AuthenticationActivity::class.java)
-            finish()
-            startActivity(intentLogout)
-        }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val pref = AuthPreferences.getInstance(dataStore)
+        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
+        when (item.itemId) {
+            R.id.logout -> {
+                authViewModel.logout()
+                val intentLogout = Intent(this, AuthenticationActivity::class.java)
+                finish()
+                startActivity(intentLogout)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showLoading(isLoading: Boolean) {
