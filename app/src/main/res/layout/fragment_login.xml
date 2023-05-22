@@ -24,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/login_image" />
 
-    <EditText
+    <com.example.storyapp.ui.custom.CustomInputEmail
         android:id="@+id/ed_login_email"
         style="@style/StandardInput"
         android:layout_marginHorizontal="4dp"
@@ -72,7 +72,7 @@
         android:layout_marginStart="16dp"
         android:visibility="gone"
         android:layout_marginTop="4dp"
-        android:text="@string/error_pass_msg"
+        android:text="@string/error_pass"
         app:layout_constraintStart_toStartOf="@+id/ed_login_password"
         app:layout_constraintTop_toBottomOf="@+id/ed_login_password"
         />

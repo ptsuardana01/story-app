@@ -2,6 +2,7 @@ package com.example.storyapp.ui.custom
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,8 +18,13 @@ import com.example.storyapp.R
 
 class CustomInputPassword : AppCompatEditText, View.OnTouchListener {
 
+    var valid: Boolean = false
     private lateinit var eyesIcon: Drawable
     private lateinit var lockIcon: Drawable
+    private lateinit var errorBg: Drawable
+    private lateinit var defaultBg: Drawable
+
+    private var errorText: String? = null
 
     constructor(context: Context) : super(context) {
         init()
@@ -43,23 +49,57 @@ class CustomInputPassword : AppCompatEditText, View.OnTouchListener {
 
     private fun init() {
         lockIcon = ContextCompat.getDrawable(context, R.drawable.baseline_lock_24) as Drawable
-        eyesIcon =
-            ContextCompat.getDrawable(context, R.drawable.baseline_eye_24) as Drawable
+        eyesIcon = ContextCompat.getDrawable(context, R.drawable.baseline_eye_24) as Drawable
+        errorBg = ContextCompat.getDrawable(context, R.drawable.custom_input_error_rounded) as Drawable
+        defaultBg = ContextCompat.getDrawable(context, R.drawable.custom_input_rounded) as Drawable
+
         setOnTouchListener(this)
 
         addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // Do nothing.
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not used
             }
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().isNotEmpty()) showEyePasswordIcon() else hideEyePasswordIcon()
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // Not used
             }
 
-            override fun afterTextChanged(s: Editable) {
-                // Do nothing.
+            override fun afterTextChanged(s: Editable?) {
+                validatePassword(s.toString())
+                background = if (isPassValid(s.toString())) {
+                    defaultBg
+                } else errorBg
             }
         })
+    }
+
+    private fun validatePassword(pass: String) {
+        val isValid = isPassValid(pass)
+
+        errorText = if (isValid) {
+            valid = true
+            null
+        } else {
+            valid = false
+            context.getString(R.string.error_pass)
+        }
+
+        showErrorText(isValid)
+    }
+
+    private fun isPassValid(pass: String): Boolean {
+        return  pass.length >= 8
+    }
+
+    private fun showErrorText(isValid: Boolean) {
+        if (errorText != null && !isValid) {
+            error = errorText
+            setTextColor(Color.RED)
+
+        } else {
+            error = null
+            setTextColor(Color.BLACK)
+        }
     }
 
     private fun showEyePasswordIcon() {

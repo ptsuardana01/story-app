@@ -1,9 +1,12 @@
 package com.example.storyapp.data.api
 
+import com.example.storyapp.data.responses.AddNewStoryResponse
 import com.example.storyapp.data.responses.LoginResponse
 import com.example.storyapp.data.responses.RegisterResponse
 import com.example.storyapp.data.responses.AllStoriesResponse
 import com.example.storyapp.data.responses.DetailStoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -30,4 +33,11 @@ interface ApiService {
     fun getDetailStory(
         @Path("id") id: String
     ) : Call<DetailStoryResponse>
+
+    @Multipart
+    @POST("stories")
+    fun addNewStory(
+        @Part("description") description: RequestBody,
+        @Part photo: MultipartBody.Part,
+    ) : Call<AddNewStoryResponse>
 }

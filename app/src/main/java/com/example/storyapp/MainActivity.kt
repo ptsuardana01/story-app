@@ -53,6 +53,11 @@ class MainActivity : AppCompatActivity() {
             showLoading(it)
         }
 
+        binding.btnAddStory.setOnClickListener {
+            val intentAddStory = Intent(this, AddStoryActivity::class.java)
+            startActivity(intentAddStory)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

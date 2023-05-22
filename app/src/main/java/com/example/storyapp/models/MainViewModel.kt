@@ -1,6 +1,8 @@
 package com.example.storyapp.models
 
 import android.util.Log
+import android.widget.Toast
+import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,10 +10,13 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.storyapp.data.api.ApiConfig
 import com.example.storyapp.data.local.AuthPreferences
+import com.example.storyapp.data.responses.AddNewStoryResponse
 import com.example.storyapp.data.responses.AllStoriesResponse
 import com.example.storyapp.data.responses.DetailStoryResponse
 import com.example.storyapp.data.responses.ListStoryItem
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,17 +46,14 @@ class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     _listStory.value = response.body()?.listStory
-                    Log.d("DL", "data: ${_listStory.value.toString()}")
                 } else {
                     _msg.value = response.message()
-                    Log.d("DL", "msg: ${_msg.value.toString()}")
                 }
             }
 
             override fun onFailure(call: Call<AllStoriesResponse>, t: Throwable) {
                 _isLoading.value = false
                 _msg.value = t.message.toString()
-                Log.d("DL", "data: ${_msg.value.toString()}")
             }
 
         })
@@ -75,6 +77,29 @@ class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
             }
 
             override fun onFailure(call: Call<DetailStoryResponse>, t: Throwable) {
+                _isLoading.value = false
+                _msg.value = t.message.toString()
+            }
+
+        })
+    }
+
+    fun addNewStory(desc: RequestBody, photo: MultipartBody.Part, token: String) {
+        _isLoading.value = true
+
+        val client = ApiConfig.getApiService("Bearer $token").addNewStory(desc, photo)
+        client.enqueue(object : Callback<AddNewStoryResponse> {
+            override fun onResponse(
+                call: Call<AddNewStoryResponse>,
+                response: Response<AddNewStoryResponse>,
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _msg.value = response.body()?.message.toString()
+                }
+            }
+
+            override fun onFailure(call: Call<AddNewStoryResponse>, t: Throwable) {
                 _isLoading.value = false
                 _msg.value = t.message.toString()
             }

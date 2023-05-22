@@ -85,7 +85,7 @@
         android:layout_marginStart="16dp"
         android:visibility="gone"
         android:layout_marginTop="4dp"
-        android:text="@string/error_pass_msg"
+        android:text="@string/error_pass"
         app:layout_constraintStart_toStartOf="@+id/ed_register_password"
         app:layout_constraintTop_toBottomOf="@+id/ed_register_password"
         />

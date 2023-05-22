@@ -30,6 +30,8 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var authViewModel: AuthViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,62 +45,18 @@ class LoginFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //Password Validation
-        binding.edLoginPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.apply {
-                    if (s.toString().length < 8) {
-                        errorPass.visibility = View.VISIBLE
-                        edLoginPassword.setBackgroundDrawable(context?.let {
-                            ContextCompat.getDrawable(
-                                it, R.drawable.custom_input_error_rounded)
-                        })
-                    } else {
-                        errorPass.visibility = View.GONE
-                        edLoginPassword.setBackgroundDrawable(context?.let {
-                            ContextCompat.getDrawable(
-                                it, R.drawable.custom_input_rounded)
-                        })
-                    }
-                }
-            }
-            override fun afterTextChanged(p0: Editable?) {}
+        val pref = AuthPreferences.getInstance(requireContext().dataStore)
+        authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
 
-        })
-
-        //Email Validation
-        binding.edLoginEmail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                binding.apply {
-                    if (isValidEmail(s.toString())) {
-                        errorEmail.visibility = View.GONE
-                        edLoginEmail.setBackgroundDrawable(context?.let {
-                            ContextCompat.getDrawable(
-                                it, R.drawable.custom_input_rounded)
-                        })
-                    } else {
-                        errorEmail.visibility = View.VISIBLE
-                        edLoginEmail.setBackgroundDrawable(context?.let {
-                            ContextCompat.getDrawable(
-                                it, R.drawable.custom_input_error_rounded)
-                        })
-                    }
-                }
-            }
-            override fun afterTextChanged(p0: Editable?) {}
-        })
+        authViewModel.getToken().observe(requireActivity()) { token ->
+            isLogin(token)
+        }
 
         binding.btnLogin.setOnClickListener(this)
         binding.includeIntentRegister.registerIntent.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
-        val pref = AuthPreferences.getInstance(requireContext().dataStore)
-        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
-
         when (v.id) {
             R.id.registerIntent -> {
                 val registerFragment = RegisterFragment()
