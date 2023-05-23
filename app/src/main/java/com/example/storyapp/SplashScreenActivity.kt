@@ -17,10 +17,14 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         scope.launch {
-            delay(3000)
-            val intentAuth = Intent(this@SplashScreenActivity, AuthenticationActivity::class.java)
-            startActivity(intentAuth)
-            finish()
+            goToNextActivity()
         }
+    }
+
+    private suspend fun goToNextActivity() {
+        delay(3000)
+        val intentSplash = Intent(this@SplashScreenActivity, AuthenticationActivity::class.java)
+        startActivity(intentSplash)
+        finish()
     }
 }

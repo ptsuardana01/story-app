@@ -1,40 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene 
+<MotionScene
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="2000"
-        motion:motionInterpolator="cubic(0,0.42,0.44,1)">
-       <KeyFrameSet>
-       </KeyFrameSet>
+        motion:duration="1000"
+        motion:autoTransition="animateToEnd">
+        <KeyFrameSet>
+        </KeyFrameSet>
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
         <Constraint
-            android:id="@+id/splash_logo"
+            android:id="@+id/splash"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            android:rotation="180"
-            android:visibility="invisible"
-            motion:transitionEasing="cubic(0,0.41,0.4,1)" />
+            android:scaleX="20"
+            android:scaleY="20" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:id="@+id/splash_logo"
+            android:id="@+id/splash"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:transitionEasing="cubic(0.21,0.19,0.8,0.8)" />
+            android:scaleX="1"
+            android:scaleY="1"
+            motion:transitionEasing="cubic(1,0,1,0.39)" />
     </ConstraintSet>
 </MotionScene>

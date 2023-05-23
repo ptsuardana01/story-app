@@ -38,7 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_header" />
 
-    <EditText
+    <com.example.storyapp.ui.custom.CustomInputEmail
         android:id="@+id/ed_register_email"
         style="@style/StandardInput"
         android:layout_marginTop="16dp"
@@ -50,18 +50,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ed_register_name" />
-
-    <TextView
-        android:id="@+id/error_email"
-        style="@style/Error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
-        android:layout_marginTop="4dp"
-        android:text="@string/error_email"
-        app:layout_constraintStart_toStartOf="@+id/ed_register_email"
-        app:layout_constraintTop_toBottomOf="@+id/ed_register_email" />
 
     <com.example.storyapp.ui.custom.CustomInputPassword
         android:id="@+id/ed_register_password"
@@ -75,20 +63,8 @@
         android:hint="@string/hint_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_email" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_email" />
 
-    <TextView
-        android:id="@+id/error_pass"
-        style="@style/Error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:visibility="gone"
-        android:layout_marginTop="4dp"
-        android:text="@string/error_pass"
-        app:layout_constraintStart_toStartOf="@+id/ed_register_password"
-        app:layout_constraintTop_toBottomOf="@+id/ed_register_password"
-        />
 
     <com.example.storyapp.ui.custom.CustomButton
         android:id="@+id/btn_register"
@@ -96,7 +72,7 @@
         android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/error_pass" />
+        app:layout_constraintTop_toBottomOf="@+id/ed_register_password" />
 
     <include
         android:id="@+id/include_loading"

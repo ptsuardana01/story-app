@@ -1,8 +1,10 @@
 package com.example.storyapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -31,15 +33,29 @@ class AuthenticationActivity : AppCompatActivity() {
         val loginFragment = LoginFragment()
         val fragment = fragmentManager.findFragmentByTag(LoginFragment::class.java.simpleName)
 
-        if (fragment !is LoginFragment) {
-            fragmentManager
-                .beginTransaction()
-                .add(
-                    R.id.auth_fragment_container,
-                    loginFragment,
-                    LoginFragment::class.java.simpleName
-                )
-                .commit()
+        authViewModel.getToken().observe(this) { token ->
+            if (token != "") {
+                isLogin(token)
+            } else {
+                if (fragment !is LoginFragment) {
+                    fragmentManager
+                        .beginTransaction()
+                        .add(
+                            R.id.auth_fragment_container,
+                            loginFragment,
+                            LoginFragment::class.java.simpleName
+                        )
+                        .commit()
+                }
+            }
+        }
+    }
+
+    private fun isLogin(token: String) {
+        if (token != "") {
+            val intentToMain = Intent(this, MainActivity::class.java)
+            startActivity(intentToMain)
+            Toast.makeText(this, "Welcome to StoryApp!", Toast.LENGTH_SHORT).show()
         }
     }
 }
