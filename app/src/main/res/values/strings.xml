@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Story App</string>
+    <string name="app_name" translatable="false">Story App</string>
     <string name="login_header">Masuk</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="auth_wave_bg">Auth wave bg</string>
-    <string name="auth_animation">Animation Auth</string>
+    <string name="auth_wave_bg" translatable="false">Auth wave bg</string>
+    <string name="auth_animation">Animasi Auth</string>
     <string name="register_quest">Tidak memiliki akun?</string>
     <string name="login_quest">Sudah memiliki akun?</string>
     <string name="register_header">Mendaftar</string>
@@ -17,8 +17,9 @@
     <string name="detail_header_story">Detail Story</string>
     <string name="detail_image">Detail Image</string>
     <string name="logout">Keluar</string>
+    <string name="setting">Pengaturan</string>
     <string name="add_story_header">Tambah Cerita</string>
-    <string name="text_capture_image">Capture Image</string>
+    <string name="text_capture_image">Tangkap Gambar</string>
     <string name="text_switch_camera">Ganti Kamera</string>
     <string name="btn_camera_x">Kamera</string>
     <string name="text_preview_image">Tampilan Gambar</string>
@@ -28,6 +29,6 @@
     <string name="validate_upload">Silakan masukkan berkas gambar dan deskripsi terlebih dahulu.</string>
     <string name="choose_pic">Pilih Gambar</string>
     <string name="validate_permission">Tidak mendapatkan permission</string>
-    <string name="img_upload_desc">photo</string>
-    <string name="story_app_logo">Story App Logo</string>
+    <string name="img_upload_desc">Foto</string>
+    <string name="story_app_logo" translatable="false">Story App Logo</string>
 </resources>

@@ -6,5 +6,10 @@
         android:title="@string/logout"
         android:icon="@drawable/baseline_logout_24"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/setting"
+        android:title="@string/logout"
+        android:icon="@drawable/baseline_settings_24"
+        app:showAsAction="ifRoom"/>
 
 </menu>
