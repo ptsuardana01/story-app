@@ -1,20 +1,14 @@
 package com.example.storyapp.models
 
-import android.util.Log
-import android.widget.Toast
-import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.storyapp.data.api.ApiConfig
 import com.example.storyapp.data.local.AuthPreferences
 import com.example.storyapp.data.responses.AddNewStoryResponse
 import com.example.storyapp.data.responses.AllStoriesResponse
 import com.example.storyapp.data.responses.DetailStoryResponse
 import com.example.storyapp.data.responses.ListStoryItem
-import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -31,6 +25,9 @@ class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
 
     private val _detailStory = MutableLiveData<DetailStoryResponse>()
     val detailStory: LiveData<DetailStoryResponse> = _detailStory
+
+    private val _listWithLocation = MutableLiveData<List<ListStoryItem>>()
+    val listWithLocation: LiveData<List<ListStoryItem>> = _listWithLocation
 
     private val _msg = MutableLiveData<String>()
     val msg: LiveData<String> = _msg
@@ -107,5 +104,28 @@ class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
         })
     }
 
+    fun getStoryLocation(token: String) {
+        _isLoading.value = true
 
+        val client = ApiConfig.getApiService("Bearer $token").getStoryLocation()
+        client.enqueue(object : Callback<AllStoriesResponse> {
+            override fun onResponse(
+                call: Call<AllStoriesResponse>,
+                response: Response<AllStoriesResponse>,
+            ) {
+                _isLoading.value = false
+                if (response.isSuccessful) {
+                    _listWithLocation.value = response.body()?.listStory
+                } else {
+                    _msg.value = response.message()
+                }
+            }
+
+            override fun onFailure(call: Call<AllStoriesResponse>, t: Throwable) {
+                _isLoading.value = false
+                _msg.value = t.message.toString()
+            }
+
+        })
+    }
 }

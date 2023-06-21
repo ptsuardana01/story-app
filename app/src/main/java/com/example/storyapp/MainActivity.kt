@@ -59,6 +59,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intentAddStory)
         }
 
+        binding.btnMaps.setOnClickListener {
+            val intentMaps = Intent(this, MapsActivity::class.java)
+            startActivity(intentMaps)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

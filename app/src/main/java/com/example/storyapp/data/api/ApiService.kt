@@ -40,4 +40,7 @@ interface ApiService {
         @Part("description") description: RequestBody,
         @Part photo: MultipartBody.Part,
     ) : Call<AddNewStoryResponse>
+
+    @GET("stories?location=1")
+    fun getStoryLocation() : Call<AllStoriesResponse>
 }

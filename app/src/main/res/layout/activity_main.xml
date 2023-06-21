@@ -30,6 +30,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_maps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="90dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/baseline_map_24"
+        android:contentDescription="@string/maps_desc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
     <include
         android:id="@+id/include_loading"
         layout="@layout/include_loading_screen"/>

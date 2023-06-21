@@ -31,4 +31,6 @@
     <string name="validate_permission">Tidak mendapatkan permission</string>
     <string name="img_upload_desc">Foto</string>
     <string name="story_app_logo" translatable="false">Story App Logo</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="maps_desc" translatable="false">Google Maps</string>
 </resources>

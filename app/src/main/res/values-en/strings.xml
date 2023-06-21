@@ -32,4 +32,6 @@
     <string name="img_upload_desc">Photo</string>
     <string name="story_app_logo">Story App Logo</string>
     <string name="setting">Setting</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps_desc">Google Maps</string>
 </resources>
