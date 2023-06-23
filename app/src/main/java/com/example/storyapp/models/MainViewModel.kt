@@ -1,20 +1,14 @@
 package com.example.storyapp.models
 
-import android.util.Log
-import android.widget.Toast
-import androidx.datastore.preferences.protobuf.Api
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
-import com.example.storyapp.data.api.ApiConfig
-import com.example.storyapp.data.local.AuthPreferences
-import com.example.storyapp.data.responses.AddNewStoryResponse
-import com.example.storyapp.data.responses.AllStoriesResponse
-import com.example.storyapp.data.responses.DetailStoryResponse
-import com.example.storyapp.data.responses.ListStoryItem
-import kotlinx.coroutines.launch
+import com.example.storyapp.data.remote.api.ApiConfig
+import com.example.storyapp.data.local.preference.AuthPreferences
+import com.example.storyapp.data.remote.responses.AddNewStoryResponse
+import com.example.storyapp.data.remote.responses.AllStoriesResponse
+import com.example.storyapp.data.remote.responses.DetailStoryResponse
+import com.example.storyapp.data.remote.responses.ListStoryItem
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

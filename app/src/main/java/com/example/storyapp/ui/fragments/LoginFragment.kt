@@ -2,20 +2,15 @@ package com.example.storyapp.ui.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.storyapp.R
-import com.example.storyapp.data.local.AuthPreferences
+import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.databinding.FragmentLoginBinding
 import com.example.storyapp.models.AuthViewModel
 import androidx.datastore.core.DataStore

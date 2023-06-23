@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.storyapp.data.responses.ListStoryItem
+import com.example.storyapp.data.remote.responses.ListStoryItem
 import com.example.storyapp.databinding.StoryItemsBinding
 
 class StoryListAdapter(private var listStory: List<ListStoryItem>) :

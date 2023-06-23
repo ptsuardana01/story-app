@@ -13,8 +13,8 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.storyapp.data.local.AuthPreferences
-import com.example.storyapp.data.responses.ListStoryItem
+import com.example.storyapp.data.local.preference.AuthPreferences
+import com.example.storyapp.data.remote.responses.ListStoryItem
 import com.example.storyapp.databinding.ActivityMainBinding
 import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory

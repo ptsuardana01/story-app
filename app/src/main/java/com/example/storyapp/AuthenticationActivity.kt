@@ -3,14 +3,13 @@ package com.example.storyapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.example.storyapp.data.local.AuthPreferences
+import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.databinding.ActivityAuthenticationBinding
 import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory

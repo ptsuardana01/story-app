@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.storyapp.MainActivity
 import com.example.storyapp.R
-import com.example.storyapp.data.local.AuthPreferences
+import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.databinding.FragmentRegisterBinding
 import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory

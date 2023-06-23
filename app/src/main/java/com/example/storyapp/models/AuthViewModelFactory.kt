@@ -2,7 +2,7 @@ package com.example.storyapp.models
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.storyapp.data.local.AuthPreferences
+import com.example.storyapp.data.local.preference.AuthPreferences
 
 class AuthViewModelFactory(private val pref: AuthPreferences) :
     ViewModelProvider.NewInstanceFactory() {

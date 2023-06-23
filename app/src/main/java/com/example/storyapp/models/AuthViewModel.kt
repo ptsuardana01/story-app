@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.storyapp.data.api.ApiConfig
-import com.example.storyapp.data.local.AuthPreferences
-import com.example.storyapp.data.responses.LoginResponse
-import com.example.storyapp.data.responses.RegisterResponse
+import com.example.storyapp.data.remote.api.ApiConfig
+import com.example.storyapp.data.local.preference.AuthPreferences
+import com.example.storyapp.data.remote.responses.LoginResponse
+import com.example.storyapp.data.remote.responses.RegisterResponse
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback

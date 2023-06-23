@@ -1,10 +1,10 @@
-package com.example.storyapp.data.api
+package com.example.storyapp.data.remote.api
 
-import com.example.storyapp.data.responses.AddNewStoryResponse
-import com.example.storyapp.data.responses.LoginResponse
-import com.example.storyapp.data.responses.RegisterResponse
-import com.example.storyapp.data.responses.AllStoriesResponse
-import com.example.storyapp.data.responses.DetailStoryResponse
+import com.example.storyapp.data.remote.responses.AddNewStoryResponse
+import com.example.storyapp.data.remote.responses.LoginResponse
+import com.example.storyapp.data.remote.responses.RegisterResponse
+import com.example.storyapp.data.remote.responses.AllStoriesResponse
+import com.example.storyapp.data.remote.responses.DetailStoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call

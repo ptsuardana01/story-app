@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.storyapp.data.local.AuthPreferences
+import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.databinding.ActivityDetailStoryBinding
 import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory

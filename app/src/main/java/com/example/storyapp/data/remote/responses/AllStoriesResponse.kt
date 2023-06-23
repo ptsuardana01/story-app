@@ -1,16 +1,16 @@
-package com.example.storyapp.data.responses
+package com.example.storyapp.data.remote.responses
 
 import com.google.gson.annotations.SerializedName
 
 data class AllStoriesResponse(
 
-	@field:SerializedName("listStory")
+    @field:SerializedName("listStory")
 	val listStory: List<ListStoryItem>,
 
-	@field:SerializedName("error")
+    @field:SerializedName("error")
 	val error: Boolean,
 
-	@field:SerializedName("message")
+    @field:SerializedName("message")
 	val message: String
 )
 
