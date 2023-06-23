@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory
 import com.example.storyapp.models.MainViewModel
 import com.example.storyapp.models.MainViewModelFactory
+import com.example.storyapp.ui.adapters.LoadingStateAdapter
 import com.example.storyapp.ui.adapters.StoryListAdapter
 
 
@@ -29,6 +31,7 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,19 +39,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val pref = AuthPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
         val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(application ,pref))[MainViewModel::class.java]
 
         binding.rvStoryApp.setHasFixedSize(true)
         showRecyclerView()
 
         authViewModel.getToken().observe(this) { token ->
-            mainViewModel.getAllListStory(token)
+            Log.d("Token", token)
+            if (token.isNullOrEmpty()) {
+                goToLoginActivity()
+            }
         }
 
-        mainViewModel.listStory.observe(this) {
-            setUser(it)
-        }
+        setUser()
 
         mainViewModel.isLoading.observe(this){
             showLoading(it)
@@ -64,6 +68,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intentMaps)
         }
 
+    }
+
+    private fun goToLoginActivity() {
+        val intentToLoginActivity = Intent(this@MainActivity, AuthenticationActivity::class.java)
+        startActivity(intentToLoginActivity)
+        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -93,18 +103,17 @@ class MainActivity : AppCompatActivity() {
         binding.includeLoading.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun setUser(items: List<ListStoryItem>) {
-        val listStory = StoryListAdapter(items)
-        binding.rvStoryApp.adapter = listStory
-
-        listStory.setOnStoryListClickCallback( object: StoryListAdapter.OnStoryListClickCallback {
-            override fun onItemClicked(story: ListStoryItem) {
-                val intentToDetail = Intent(this@MainActivity, DetailStoryActivity::class.java)
-                intentToDetail.putExtra(DetailStoryActivity.ID, story.id)
-                startActivity(intentToDetail)
+    private fun setUser() {
+        val listStory = StoryListAdapter()
+        binding.rvStoryApp.adapter = listStory.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                listStory.retry()
             }
+        )
+        mainViewModel.listStory.observe(this) { story ->
+            listStory.submitData(lifecycle, story)
+        }
 
-        })
     }
 
     private fun showRecyclerView() {

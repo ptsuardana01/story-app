@@ -45,7 +45,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val pref = AuthPreferences.getInstance(dataStore)
         val mainViewModel =
-            ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
+            ViewModelProvider(this, MainViewModelFactory(application ,pref))[MainViewModel::class.java]
         val authViewModel =
             ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
 
@@ -107,12 +107,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         listData = ArrayList()
         for (data in listDataStory) {
             val list = ListStoryItem(
+                data.id,
                 data.photoUrl,
                 data.createdAt,
                 data.name,
                 data.description,
                 data.lon,
-                data.id,
                 data.lat
             )
             listData.add(list)

@@ -5,14 +5,14 @@ import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Location
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCaller
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -29,6 +29,8 @@ import com.example.storyapp.models.MainViewModelFactory
 import com.example.storyapp.utils.rotateFile
 import com.example.storyapp.utils.uriToFile
 import okhttp3.MediaType.Companion.toMediaType
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -40,6 +42,8 @@ class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
     private var getFile: File? = null
+    private var currentLocation: Location? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,9 @@ class AddStoryActivity : AppCompatActivity() {
         binding.btnCameraX.setOnClickListener { startCameraX() }
         binding.btnGallery.setOnClickListener { startGallery() }
         binding.btnUpload.setOnClickListener { uploadImage() }
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        getMyLastLocation()
 
     }
 
@@ -84,8 +91,9 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun uploadImage() {
+        Log.d("Upload", "Btn Upload clicked!")
         val pref = AuthPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
+        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(application,pref))[MainViewModel::class.java]
         val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
 
         val descText = binding.storyDesc.text.toString()
@@ -100,13 +108,22 @@ class AddStoryActivity : AppCompatActivity() {
                 file.name,
                 requestImageFile
             )
+            val lat = currentLocation?.latitude?.toFloat()
+            val lon = currentLocation?.longitude?.toFloat()
 
             authViewModel.getToken().observe(this) { token ->
-                mainViewModel.addNewStory(desc, imageMultipart, token)
+                mainViewModel.addNewStory(desc, imageMultipart, token, lat, lon)
+                Log.d("GU", "$desc, $imageMultipart")
             }
 
-            mainViewModel.isLoading.observe(this) {
-                showLoading(it)
+            mainViewModel.apply {
+                isLoading.observe(this@AddStoryActivity) {
+                    showLoading(it)
+                }
+
+                msgUpload.observe(this@AddStoryActivity) { msg ->
+                    Toast.makeText(this@AddStoryActivity, msg, Toast.LENGTH_SHORT).show()
+                }
             }
 
             val intentHome = Intent(this, MainActivity::class.java)
@@ -117,6 +134,37 @@ class AddStoryActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(this@AddStoryActivity, getString(R.string.validate_upload), Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun getMyLastLocation() {
+        if(checkPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION)
+        ){
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    currentLocation = location
+                } else {
+                    Toast.makeText(
+                        this@AddStoryActivity,
+                        getString(R.string.location_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        } else {
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
         }
     }
 
@@ -133,6 +181,25 @@ class AddStoryActivity : AppCompatActivity() {
         val intentCameraX = Intent(this, CameraActivity::class.java)
         launcherIntentCameraX.launch(intentCameraX)
     }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.includeLoading.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions[android.Manifest.permission.ACCESS_FINE_LOCATION] ?: false -> {
+                    getMyLastLocation()
+                }
+                permissions[android.Manifest.permission.ACCESS_COARSE_LOCATION] ?: false -> {
+                    getMyLastLocation()
+                }
+                else -> {}
+            }
+        }
 
     private val launcherIntentCameraX = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -165,10 +232,6 @@ class AddStoryActivity : AppCompatActivity() {
                 binding.previewImgView.setImageURI(uri)
             }
         }
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.includeLoading.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     companion object {

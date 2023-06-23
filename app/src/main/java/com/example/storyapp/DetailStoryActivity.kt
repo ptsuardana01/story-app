@@ -30,7 +30,7 @@ class DetailStoryActivity : AppCompatActivity() {
         supportActionBar?.title = getString(R.string.detail_header_story)
 
         val pref = AuthPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
+        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(application, pref))[MainViewModel::class.java]
         val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
 
         authViewModel.getToken().observe(this) { token ->
@@ -65,5 +65,6 @@ class DetailStoryActivity : AppCompatActivity() {
 
     companion object {
         const val ID = "0"
+        const val EXTRA_STORY_ITEMS = "extra_story"
     }
 }
