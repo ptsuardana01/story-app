@@ -17,7 +17,6 @@ import com.example.storyapp.databinding.StoryItemsBinding
 class StoryListAdapter :
     PagingDataAdapter<ListStoryItem, StoryListAdapter.ListViewHolder>(DIFF_CALLBACK) {
 
-    private lateinit var onStoryListClickCallback: OnStoryListClickCallback
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val binding = StoryItemsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
@@ -28,14 +27,6 @@ class StoryListAdapter :
         if (data != null) {
             holder.bind(data)
         }
-    }
-
-    fun setOnStoryListClickCallback(onStoryListClickCallback: OnStoryListClickCallback) {
-        this.onStoryListClickCallback = onStoryListClickCallback
-    }
-
-    interface OnStoryListClickCallback {
-        fun onItemClicked(story: ListStoryItem)
     }
 
     class ListViewHolder(

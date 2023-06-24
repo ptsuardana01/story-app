@@ -40,10 +40,18 @@ class MainActivity : AppCompatActivity() {
             showLoading(it)
         }
 
-        binding.btnAddStory.setOnClickListener {
-            val intentAddStory = Intent(this, AddStoryActivity::class.java)
-            startActivity(intentAddStory)
+        binding.apply {
+            btnAddStory.setOnClickListener {
+                val intentAddStory = Intent(this@MainActivity, AddStoryActivity::class.java)
+                startActivity(intentAddStory)
+            }
+
+            btnMaps.setOnClickListener {
+                val intentMaps = Intent(this@MainActivity, MapsActivity::class.java)
+                startActivity(intentMaps)
+            }
         }
+
 
     }
 

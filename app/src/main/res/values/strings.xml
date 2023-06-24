@@ -33,5 +33,9 @@
     <string name="story_app_logo">Story App Logo</string>
     <string name="timeout">Batas Waktu Permintaan Habis</string>
     <string name="retry">Coba Lagi</string>
+    <string name="maps_desc">Google Maps</string>
     <string name="validate_all_input">Mohon melengkapi feild yang tersedia!</string>
+    <string name="location_error">Tidak dapat menemukan lokasi anda!</string>
+    <string name="maps_error">Data lokasi tidak ditemukan</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

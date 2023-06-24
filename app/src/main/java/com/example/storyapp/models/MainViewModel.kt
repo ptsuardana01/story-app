@@ -1,5 +1,6 @@
 package com.example.storyapp.models
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +21,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MainViewModel(private val repository: StoryRepository) : ViewModel() {
+
+    private val _listStoryLocation = MutableLiveData<List<ListStoryItem>>()
+    val listStoryLocation: LiveData<List<ListStoryItem>> = _listStoryLocation
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -58,10 +62,10 @@ class MainViewModel(private val repository: StoryRepository) : ViewModel() {
         })
     }
 
-    fun addNewStory(desc: RequestBody, photo: MultipartBody.Part, token: String) {
+    fun addNewStory(desc: RequestBody, photo: MultipartBody.Part, token: String, lat: Float?, lon: Float?) {
         _isLoading.value = true
 
-        val client = ApiConfig.getApiService().addNewStory("Bearer $token", desc, photo)
+        val client = ApiConfig.getApiService().addNewStory("Bearer $token", desc, photo, lat, lon)
         client.enqueue(object : Callback<AddNewStoryResponse> {
             override fun onResponse(
                 call: Call<AddNewStoryResponse>,
@@ -78,6 +82,23 @@ class MainViewModel(private val repository: StoryRepository) : ViewModel() {
                 _msg.value = t.message.toString()
             }
 
+        })
+    }
+
+    fun getAllStoryWithLocation(token: String) {
+        val client = ApiConfig.getApiService().getStoryWithLocation("Bearer $token")
+        client.enqueue(object : Callback<StoryResponse> {
+            override fun onResponse(call: Call<StoryResponse>, response: Response<StoryResponse>) {
+                if (response.isSuccessful) {
+                    _listStoryLocation.value = response.body()?.listStory as List<ListStoryItem>
+                } else {
+                    Log.e("Maps", "onFailure : ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StoryResponse>, t: Throwable) {
+                Log.e("Maps", "onFailure : ${t.message}")
+            }
         })
     }
 
