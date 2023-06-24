@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Story App</string>
+    <string name="app_name" translatable="false">Story App</string>
     <string name="welcome_text">Selamat Datang di StoryApp!</string>
     <string name="login_header">Masuk</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="auth_wave_bg">Auth wave bg</string>
-    <string name="auth_animation">Animation Auth</string>
+    <string name="auth_wave_bg" translatable="false">Auth wave bg</string>
+    <string name="auth_animation" translatable="false">Animation Auth</string>
     <string name="register_quest">Tidak memiliki akun?</string>
     <string name="login_quest">Sudah memiliki akun?</string>
     <string name="register_header">Mendaftar</string>
@@ -33,9 +33,10 @@
     <string name="story_app_logo">Story App Logo</string>
     <string name="timeout">Batas Waktu Permintaan Habis</string>
     <string name="retry">Coba Lagi</string>
-    <string name="maps_desc">Google Maps</string>
+    <string name="maps_desc" translatable="false">Google Maps</string>
     <string name="validate_all_input">Mohon melengkapi feild yang tersedia!</string>
     <string name="location_error">Tidak dapat menemukan lokasi anda!</string>
     <string name="maps_error">Data lokasi tidak ditemukan</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps" translatable="false">MapsActivity</string>
+    <string name="settings">Pengaturan</string>
 </resources>

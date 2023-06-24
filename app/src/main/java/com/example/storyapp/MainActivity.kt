@@ -2,6 +2,7 @@ package com.example.storyapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -96,6 +97,10 @@ class MainActivity : AppCompatActivity() {
                 intentLogout.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 finish()
                 startActivity(intentLogout)
+            }
+
+            R.id.settings -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
             }
         }
         return super.onOptionsItemSelected(item)
