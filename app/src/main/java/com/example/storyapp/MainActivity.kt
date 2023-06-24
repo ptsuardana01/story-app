@@ -1,55 +1,42 @@
 package com.example.storyapp
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.storyapp.data.local.preference.AuthPreferences
-import com.example.storyapp.data.remote.responses.ListStoryItem
+import com.example.storyapp.data.local.preference.AuthPreferencesViewModel
 import com.example.storyapp.databinding.ActivityMainBinding
-import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory
 import com.example.storyapp.models.MainViewModel
-import com.example.storyapp.models.MainViewModelFactory
+import com.example.storyapp.models.ViewModelFactory
+import com.example.storyapp.ui.adapters.LoadingStateAdapter
 import com.example.storyapp.ui.adapters.StoryListAdapter
-
-
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val mainViewModel: MainViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
+    private val authPreferencesViewModel: AuthPreferencesViewModel by viewModels {
+        AuthViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val pref = AuthPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
-        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
-
-        binding.rvStoryApp.setHasFixedSize(true)
         showRecyclerView()
 
-        authViewModel.getToken().observe(this) { token ->
-            mainViewModel.getAllListStory(token)
-        }
-
-        mainViewModel.listStory.observe(this) {
-            setUser(it)
-        }
-
-        mainViewModel.isLoading.observe(this){
+        mainViewModel.isLoading.observe(this) {
             showLoading(it)
         }
 
@@ -65,13 +52,40 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    private fun showRecyclerView() {
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStoryApp.layoutManager = layoutManager
+
+        binding.rvStoryApp.setHasFixedSize(true)
+
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvStoryApp.addItemDecoration(itemDecoration)
+
+        val listStory = StoryListAdapter()
+        binding.rvStoryApp.adapter = listStory
+
+        binding.rvStoryApp.adapter = listStory.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                listStory.retry()
+            }
+        )
+
+        lifecycleScope.launch {
+            authPreferencesViewModel.getToken().observe(this@MainActivity) { token ->
+                mainViewModel.listStory(token).observe(this@MainActivity) { pagingData ->
+                    listStory.submitData(lifecycle, pagingData)
+                }
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val pref = AuthPreferences.getInstance(dataStore)
-        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
         when (item.itemId) {
             R.id.logout -> {
-                authViewModel.logout()
+                authPreferencesViewModel.logout()
                 val intentLogout = Intent(this, AuthenticationActivity::class.java)
+                intentLogout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                intentLogout.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 finish()
                 startActivity(intentLogout)
             }
@@ -81,26 +95,5 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         binding.includeLoading.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
-
-    private fun setUser(items: List<ListStoryItem>) {
-        val listStory = StoryListAdapter(items)
-        binding.rvStoryApp.adapter = listStory
-
-        listStory.setOnStoryListClickCallback( object: StoryListAdapter.OnStoryListClickCallback {
-            override fun onItemClicked(story: ListStoryItem) {
-                val intentToDetail = Intent(this@MainActivity, DetailStoryActivity::class.java)
-                intentToDetail.putExtra(DetailStoryActivity.ID, story.id)
-                startActivity(intentToDetail)
-            }
-
-        })
-    }
-
-    private fun showRecyclerView() {
-        val layoutManager = LinearLayoutManager(this)
-        binding.rvStoryApp.layoutManager = layoutManager
-        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
-        binding.rvStoryApp.addItemDecoration(itemDecoration)
     }
 }

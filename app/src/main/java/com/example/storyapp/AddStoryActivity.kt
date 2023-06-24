@@ -17,19 +17,9 @@ import androidx.core.content.ContextCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
-import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.databinding.ActivityAddStoryBinding
-import com.example.storyapp.models.AuthViewModel
-import com.example.storyapp.models.AuthViewModelFactory
-import com.example.storyapp.models.MainViewModel
-import com.example.storyapp.models.MainViewModelFactory
 import com.example.storyapp.utils.rotateFile
 import com.example.storyapp.utils.uriToFile
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
@@ -82,40 +72,40 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun uploadImage() {
-        val pref = AuthPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
-        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
-
-        val descText = binding.storyDesc.text.toString()
-
-        if (getFile != null && descText != "") {
-            val file = getFile as File
-
-            val desc = descText.toRequestBody("image/plain".toMediaType())
-            val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
-            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
-                getString(R.string.img_upload_desc),
-                file.name,
-                requestImageFile
-            )
-
-            authViewModel.getToken().observe(this) { token ->
-                mainViewModel.addNewStory(desc, imageMultipart, token)
-            }
-
-            mainViewModel.isLoading.observe(this) {
-                showLoading(it)
-            }
-
-            val intentHome = Intent(this, MainActivity::class.java)
-            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intentHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            finish()
-            startActivity(intentHome)
-
-        } else {
-            Toast.makeText(this@AddStoryActivity, getString(R.string.validate_upload), Toast.LENGTH_SHORT).show()
-        }
+//        val pref = AuthPreferences.getInstance()
+//        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
+//        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
+//
+//        val descText = binding.storyDesc.text.toString()
+//
+//        if (getFile != null && descText != "") {
+//            val file = getFile as File
+//
+//            val desc = descText.toRequestBody("image/plain".toMediaType())
+//            val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
+//            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+//                getString(R.string.img_upload_desc),
+//                file.name,
+//                requestImageFile
+//            )
+//
+//            authViewModel.getToken().observe(this) { token ->
+//                mainViewModel.addNewStory(desc, imageMultipart, token)
+//            }
+//
+//            mainViewModel.isLoading.observe(this) {
+//                showLoading(it)
+//            }
+//
+//            val intentHome = Intent(this, MainActivity::class.java)
+//            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+//            intentHome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            finish()
+//            startActivity(intentHome)
+//
+//        } else {
+//            Toast.makeText(this@AddStoryActivity, getString(R.string.validate_upload), Toast.LENGTH_SHORT).show()
+//        }
     }
 
     private fun startGallery() {

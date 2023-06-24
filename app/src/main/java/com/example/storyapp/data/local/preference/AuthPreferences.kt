@@ -1,38 +1,41 @@
 package com.example.storyapp.data.local.preference
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.Flow
 
-class AuthPreferences private constructor(private val dataStore: DataStore<Preferences>) {
+const val DATASTORE_NAME = "AUTH"
+val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = DATASTORE_NAME)
 
-    private val TOKEN = stringPreferencesKey("token")
-
-    fun getToken(): Flow<String> {
-        return dataStore.data.map {preferences ->
-            preferences[TOKEN] ?: ""
-        }
-    }
+class AuthPreferences(
+    private val context: Context,
+) {
 
     suspend fun saveToken(token: String) {
-        dataStore.edit { preferences ->
+        context.datastore.edit { preferences ->
             preferences[TOKEN] = token
         }
     }
 
-    companion object {
-        @Volatile
-        private var INSTANCE: AuthPreferences? = null
+    fun getToken() = context.datastore.data.map { preferences ->
+        preferences[TOKEN] ?: ""
+    }
 
-        fun getInstance(dataStore: DataStore<Preferences>): AuthPreferences {
-            return INSTANCE ?: synchronized(this) {
-                val instance = AuthPreferences(dataStore)
-                INSTANCE = instance
-                instance
-            }
-        }
+    companion object {
+        val TOKEN = stringPreferencesKey("token")
+
+        @SuppressLint("StaticFieldLeak")
+        @Volatile
+        private var instance: AuthPreferences? = null
+
+        fun getInstance(context: Context): AuthPreferences =
+            instance ?: synchronized(this) {
+                instance ?: AuthPreferences(context)
+            }.also { instance = it }
     }
 }

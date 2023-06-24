@@ -1,26 +1,31 @@
 package com.example.storyapp
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.storyapp.data.local.preference.AuthPreferences
+import com.example.storyapp.data.local.preference.AuthPreferencesViewModel
 import com.example.storyapp.databinding.ActivityDetailStoryBinding
-import com.example.storyapp.models.AuthViewModel
 import com.example.storyapp.models.AuthViewModelFactory
 import com.example.storyapp.models.MainViewModel
-import com.example.storyapp.models.MainViewModelFactory
+import com.example.storyapp.models.ViewModelFactory
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth")
 
 class DetailStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailStoryBinding
+    private val mainViewModel: MainViewModel by viewModels {
+        ViewModelFactory.getInstance(this)
+    }
+    private val authPreferencesViewModel: AuthPreferencesViewModel by viewModels {
+        AuthViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,15 +34,18 @@ class DetailStoryActivity : AppCompatActivity() {
 
         supportActionBar?.title = getString(R.string.detail_header_story)
 
-        val pref = AuthPreferences.getInstance(dataStore)
-        val mainViewModel = ViewModelProvider(this, MainViewModelFactory(pref))[MainViewModel::class.java]
-        val authViewModel = ViewModelProvider(this, AuthViewModelFactory(pref))[AuthViewModel::class.java]
+        mainViewModel.apply {
+            isLoading.observe(this@DetailStoryActivity) {
+                showLoading(it)
+            }
 
-        authViewModel.getToken().observe(this) { token ->
             val id = intent?.getStringExtra(ID)
             if (id != null) {
-                mainViewModel.getDetailStory(id, token)
+                authPreferencesViewModel.getToken().observe(this@DetailStoryActivity) { token ->
+                    mainViewModel.getDetailStory(id, token)
+                }
             }
+
         }
 
         mainViewModel.detailStory.observe(this) { detail ->
@@ -51,11 +59,6 @@ class DetailStoryActivity : AppCompatActivity() {
                 detailDesc.text = detail.story.description
             }
         }
-
-        mainViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -65,5 +68,6 @@ class DetailStoryActivity : AppCompatActivity() {
 
     companion object {
         const val ID = "0"
+        const val EXTRA_STORY_ITEMS = "extra_story"
     }
 }

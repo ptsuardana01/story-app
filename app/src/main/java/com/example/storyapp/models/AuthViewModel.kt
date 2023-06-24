@@ -9,13 +9,20 @@ import androidx.lifecycle.viewModelScope
 import com.example.storyapp.data.remote.api.ApiConfig
 import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.data.remote.responses.LoginResponse
+import com.example.storyapp.data.remote.responses.LoginResult
 import com.example.storyapp.data.remote.responses.RegisterResponse
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class AuthViewModel(private val pref: AuthPreferences) : ViewModel() {
+class AuthViewModel : ViewModel() {
+
+    private val _login = MutableLiveData<LoginResult>()
+    val login: LiveData<LoginResult> = _login
+
+    private val _register = MutableLiveData<RegisterResponse>()
+    val register: LiveData<RegisterResponse> = _register
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -34,11 +41,8 @@ class AuthViewModel(private val pref: AuthPreferences) : ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    val result = response.body()?.loginResult
-                    result?.token?.let {
-                        saveToken(it)
-                    }
-                    Log.d("tokenVm", "token: ${result?.token}")
+                    _login.value = response.body()?.loginResult
+                    Log.d("tokenVm", "token: ${response.body()?.loginResult}")
                 } else {
                     _msg.value = response.message()
                     Log.d("tokenVm", "msg: ${_msg.value}")
@@ -62,10 +66,9 @@ class AuthViewModel(private val pref: AuthPreferences) : ViewModel() {
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
-                    val result = response.body()
-                    if (result?.error == false) {
-                        login(email, password)
-                    }
+                    _register.value = response.body()
+                    _msg.value = response.message()
+                    login(email, password)
                 } else {
                     _msg.value = response.message()
                     Log.d("regisVm", "msg: ${_msg.value}")
@@ -78,19 +81,5 @@ class AuthViewModel(private val pref: AuthPreferences) : ViewModel() {
             }
 
         })
-    }
-
-    fun getToken(): LiveData<String> {
-        return pref.getToken().asLiveData()
-    }
-
-    fun saveToken(token: String) {
-        viewModelScope.launch {
-            pref.saveToken(token)
-        }
-    }
-
-    fun logout() {
-        saveToken("")
     }
 }

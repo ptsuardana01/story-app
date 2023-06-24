@@ -3,10 +3,14 @@ package com.example.storyapp.models
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.example.storyapp.data.StoryRepository
 import com.example.storyapp.data.remote.api.ApiConfig
 import com.example.storyapp.data.local.preference.AuthPreferences
 import com.example.storyapp.data.remote.responses.AddNewStoryResponse
-import com.example.storyapp.data.remote.responses.AllStoriesResponse
+import com.example.storyapp.data.remote.responses.StoryResponse
 import com.example.storyapp.data.remote.responses.DetailStoryResponse
 import com.example.storyapp.data.remote.responses.ListStoryItem
 import okhttp3.MultipartBody
@@ -15,13 +19,10 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
+class MainViewModel(private val repository: StoryRepository) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _listStory = MutableLiveData<List<ListStoryItem>>()
-    val listStory: LiveData<List<ListStoryItem>> = _listStory
 
     private val _detailStory = MutableLiveData<DetailStoryResponse>()
     val detailStory: LiveData<DetailStoryResponse> = _detailStory
@@ -29,34 +30,13 @@ class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
     private val _msg = MutableLiveData<String>()
     val msg: LiveData<String> = _msg
 
-    fun getAllListStory(token : String) {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService("Bearer $token").getAllStories()
-        client.enqueue(object : Callback<AllStoriesResponse> {
-            override fun onResponse(
-                call: Call<AllStoriesResponse>,
-                response: Response<AllStoriesResponse>,
-            ) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _listStory.value = response.body()?.listStory
-                } else {
-                    _msg.value = response.message()
-                }
-            }
-
-            override fun onFailure(call: Call<AllStoriesResponse>, t: Throwable) {
-                _isLoading.value = false
-                _msg.value = t.message.toString()
-            }
-
-        })
-    }
+    fun listStory(tkn: String): LiveData<PagingData<ListStoryItem>> =
+        repository.getStory(tkn).cachedIn(viewModelScope)
 
     fun getDetailStory(id: String, token: String) {
         _isLoading.value = true
 
-        val client = ApiConfig.getApiService("Bearer $token").getDetailStory(id)
+        val client = ApiConfig.getApiService().getDetailStory("Bearer $token", id)
         client.enqueue(object: Callback<DetailStoryResponse> {
             override fun onResponse(
                 call: Call<DetailStoryResponse>,
@@ -81,7 +61,7 @@ class MainViewModel(private val pref: AuthPreferences) : ViewModel() {
     fun addNewStory(desc: RequestBody, photo: MultipartBody.Part, token: String) {
         _isLoading.value = true
 
-        val client = ApiConfig.getApiService("Bearer $token").addNewStory(desc, photo)
+        val client = ApiConfig.getApiService().addNewStory("Bearer $token", desc, photo)
         client.enqueue(object : Callback<AddNewStoryResponse> {
             override fun onResponse(
                 call: Call<AddNewStoryResponse>,
