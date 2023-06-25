@@ -67,6 +67,35 @@ class MainViewModelTest {
 
     }
 
+    @Test
+    fun listStoryIsEmpty() = runTest {
+        val dummyList = DataDummy.emptyDummyDataEntity()
+        val pagingData: PagingData<ListStoryItem> = PagingTestDataSource.snapshot(dummyList)
+
+        val storyList = MutableLiveData<PagingData<ListStoryItem>>()
+        storyList.value = pagingData
+
+        Mockito.`when`(repository.getStory(TOKEN)).thenReturn(storyList)
+
+        val viewModel = MainViewModel(repository)
+        val trueStory : PagingData<ListStoryItem> = viewModel.listStory(TOKEN).getOrAwait()
+
+        val differ = AsyncPagingDataDiffer(
+            diffCallback = StoryListAdapter.DIFF_CALLBACK,
+            updateCallback = noopListUpdateCallback,
+            workerDispatcher = Dispatchers.Main,
+        )
+
+        differ.submitData(trueStory)
+
+        advanceUntilIdle()
+
+
+        assertNotNull(differ.snapshot())
+        assertEquals(0, differ.snapshot().size)
+    }
+
+
     companion object {
         private const val TOKEN = "Bearer TOKEN"
     }
